@@ -1,0 +1,30 @@
+<?php
+// HTTP
+define('HTTP_SERVER', 'http://www.galleon-group.com/cms/admin/');
+define('HTTP_CATALOG', 'http://www.galleon-group.com/cms/');
+
+// HTTPS
+define('HTTPS_SERVER', 'http://www.galleon-group.com/cms/admin/');
+define('HTTPS_CATALOG', 'http://www.galleon-group.com/cms/');
+
+// DIR
+define('DIR_APPLICATION', '/var/www/html/galleon-group.com/httpdocs/cms/admin/');
+define('DIR_SYSTEM', '/var/www/html/galleon-group.com/httpdocs/cms/system/');
+define('DIR_DATABASE', '/var/www/html/galleon-group.com/httpdocs/cms/system/database/');
+define('DIR_LANGUAGE', '/var/www/html/galleon-group.com/httpdocs/cms/admin/language/');
+define('DIR_TEMPLATE', '/var/www/html/galleon-group.com/httpdocs/cms/admin/view/template/');
+define('DIR_CONFIG', '/var/www/html/galleon-group.com/httpdocs/cms/system/config/');
+define('DIR_IMAGE', '/var/www/html/galleon-group.com/httpdocs/cms/image/');
+define('DIR_CACHE', '/var/www/html/galleon-group.com/httpdocs/cms/system/cache/');
+define('DIR_DOWNLOAD', '/var/www/html/galleon-group.com/httpdocs/cms/download/');
+define('DIR_LOGS', '/var/www/html/galleon-group.com/httpdocs/cms/system/logs/');
+define('DIR_CATALOG', '/var/www/html/galleon-group.com/httpdocs/cms/catalog/');
+
+// DB
+define('DB_DRIVER', 'mysql');
+define('DB_HOSTNAME', 'localhost');
+define('DB_USERNAME', 'ggroup');
+define('DB_PASSWORD', '');
+define('DB_DATABASE', 'galleon');
+define('DB_PREFIX', 'oc_');
+?>

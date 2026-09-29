@@ -1,0 +1,127 @@
+<?php
+require_once("db_config.php");
+require_once("application.php");
+
+function genTopCategoryCache($force=false) {
+	$cacheFile = "cache/top_categories";
+
+	if($force || !file_exists($cacheFile)) {
+		$topCategories = array();
+
+		foreach(array("en"=>1, "tc"=>2) as $lang=>$langID) {
+			$topCategories[$lang] = getCategories(0, $langID);
+
+			foreach($topCategories[$lang] as $key=>$topCategory) {
+				$topCategories[$lang][$key]["sub_categories"] = getCategories($topCategory["category_id"], $langID);
+			}
+		}
+
+		file_put_contents($cacheFile, json_encode($topCategories));
+	}
+}
+
+function getCategoryTree($categoryID) {
+	global $db;
+
+	$results = array();
+	$langID = $_SESSION['lang_id'];
+
+	if($stmt = $db->prepare("select cd.category_id, cd.name from oc_category_path cp, oc_category_description cd where cp.path_id = cd.category_id and cp.category_id = ? and cd.language_id = ? order by cp.level")) {
+		$stmt->bind_param("dd", $categoryID, $langID);
+		$stmt->execute();
+		$stmt->bind_result($categoryID, $categoryName);
+
+		while($stmt->fetch()) {
+			$results[] = array('category_id'=>$categoryID, 'category_name'=>$categoryName);
+		}
+	}
+
+	$stmt->close();
+
+	return $results;
+}
+
+function getCategories($parentID=0, $langID=false) {
+	global $db;
+
+	$results = array();
+
+	if(!$langID)
+		$langID = $_SESSION['lang_id'];
+
+	if($stmt = $db->prepare("select c.category_id, cd.name, c.image from oc_category c, oc_category_description cd where c.category_id = cd.category_id and  c.status = 1 and c.parent_id = ? and cd.language_id = ? order by c.sort_order")) {
+		$stmt->bind_param("dd", $parentID, $langID);
+		$stmt->execute();
+		$stmt->bind_result($categoryID, $categoryName, $image);
+
+		while($stmt->fetch()) {
+			//printf("Category: %s, %s<br/>", $categoryID, $categoryName);
+			$results[] = array('category_id'=>$categoryID, 'category_name'=>$categoryName, 'image'=>$image);
+		}
+	}
+
+	$stmt->close();
+
+	return $results;
+}
+
+function getProducts($categoryID=0) {
+	global $db;
+
+	$results = array();
+	$langID = $_SESSION['lang_id'];
+
+	if($stmt = $db->prepare("select p.product_id, p.model, p.upc, pd.name, pd.meta_description, p.image from oc_product p, oc_product_to_category p2c, oc_product_description pd where p.product_id = p2c.product_id and p.product_id = pd.product_id and p.status = 1 and p2c.category_id = ? and pd.language_id = ? order by p.sort_order")) {
+		$stmt->bind_param("dd", $categoryID, $langID);
+		$stmt->execute();
+		$stmt->bind_result($productID, $modelNo, $productNo, $name, $brand, $image);
+
+		while($stmt->fetch()) {
+			//printf("Product: %s, %s, %s, %s, %s<br/>", $productID, $modelNo, $productNo, $brand, $name);
+			$results[] = array('product_id'=>$productID, 'model_no'=>$modelNo, 'product_no'=>$productNo, 'brand'=>$brand, 'name'=>$name, 'image'=>$image);
+		}
+	}
+
+	$stmt->close();
+
+	return $results;
+}
+
+function getProductDetail($productID=0) {
+	global $db;
+
+	$result = array();
+	$langID = $_SESSION['lang_id'];
+
+	if($stmt = $db->prepare("select p.model, p.upc, pd.name, pd.description, pd.meta_description, p2c.category_id from oc_product p, oc_product_description pd, oc_product_to_category p2c where p.product_id = pd.product_id and p.product_id = p2c.product_id and p.status = 1 and p.product_id = ? and pd.language_id = ?")) {
+		$stmt->bind_param("dd", $productID, $langID);
+		$stmt->execute();
+		$stmt->bind_result($modelNo, $productNo, $name, $description, $brand, $categoryID);
+
+		if($stmt->fetch()) {
+			//printf("Product: %s, %s, %s, %s, %s<br/>", $modelNo, $productNo, $brand, $name, html_entity_decode($description));
+			$stmt->close();
+
+			$images = array();
+			if($imgStmt = $db->prepare("select image from oc_product_image where product_id = ? order by sort_order")) {
+				$imgStmt->bind_param("d", $productID);
+				$imgStmt->execute();
+				$imgStmt->bind_result($image);
+
+				while($imgStmt->fetch()) {
+					//printf("  Image: %s<br/>", $image);
+					$images[] = $image;
+				}
+			}
+
+			$result = array('product_id'=>$productID, 'model_no'=>$modelNo, 'product_no'=>$productNo, 'brand'=>$brand, 'name'=>$name, 'description'=>html_entity_decode($description), 'category_id'=>$categoryID, 'images'=>$images);
+		}
+	}
+
+	$imgStmt->close();
+
+	return $result;
+}
+
+genTopCategoryCache();
+?>

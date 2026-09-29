@@ -1,0 +1,119 @@
+body{
+}
+
+
+ul{
+
+}
+a{text-decoration:none;}
+/*==导航样式开始===*/
+.nav{
+	height:94px;
+	width:100%;
+	position:relative;
+	background-color: #b5ff32;
+	z-index: 3;
+}
+.nav ul li{
+	display:inline;
+	float:none;
+
+}
+.nav ul li a{
+
+}
+#nav{
+}
+#nav ul{
+	position:absolute;
+	left:0px;
+	top:94px;
+	width:100%;
+	background-image: url(../nav/bg.png);
+	z-index: 10;
+	visibility: hidden;
+}
+#nav ul li{
+	float:none;
+	display:inline;
+} 
+#nav ul li a{
+	color:#ffffff;
+}
+#nav ul li a:hover{ color:#ffffff;}
+
+
+#aubanner{
+	position:relative;
+	left:0px;
+	width:100%;
+	background:#111111 url(../images/au_banner.png) 50% 50%;
+	background-position:top;
+	height: 119px;
+	z-index: 2;
+}
+
+#osbanner{
+	position:relative;
+	left:0px;
+	width:100%;
+	background:#111111 url(../images/os_banner.png) 50% 50%;
+	background-position:top;
+	height: 119px;
+	z-index: 2;
+}
+
+#opbanner{
+	position:relative;
+	left:0px;
+	width:100%;
+	background:#111111 url(../images/op_banner.png) 50% 50%;
+	background-position:top;
+	height: 119px;
+	z-index: 2;
+}
+
+#ctbanner{
+	position:relative;
+	left:0px;
+	width:100%;
+	background:#111111 url(../images/ct.jpg) 50% 50%;
+	background-position:top;
+	height: 119px;
+	z-index: 2;
+}
+
+#dbanner{
+	position:relative;
+	left:0px;
+	width:100%;
+	background:#111111 url(../images/d.jpg) 50% 50%;
+	background-position:top;
+	height: 119px;
+	z-index: 2;
+}
+
+#cbanner{
+	position:relative;
+	left:0px;
+	width:100%;
+	background:#111111 url(../images/cu_banner.png) 50% 50%;
+	background-position:top;
+	height: 119px;
+	z-index: 2;
+}
+
+
+
+
+
+.navbg {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size:14px;
+}
+
+.navbg2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
+}

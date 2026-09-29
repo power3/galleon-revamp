@@ -1,0 +1,137 @@
+<?php
+        require_once('includes/application.php');
+        require_once('includes/catalog.php');
+
+        $productID = $_GET['product_id'];
+        $productDetail = getProductDetail($productID);
+	$categoryTree = getCategoryTree($productDetail['category_id']);
+
+	$bannerStr = '<div id="opbanner"></div>';
+
+	include_once('includes/header.php');
+?>
+                <table width="90%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td align="center" valign="top"><p align="justify" class="style2 tree">
+			<?php
+				for($t = 0; $t < count($categoryTree); $t++) {
+                                        if($t > 0)
+                                                echo " / ";
+					echo '<a href="our_products.php?category_id=' . $categoryTree[$t]['category_id'] . '">' . $categoryTree[$t]['category_name'] . '</a>';
+                                }
+			?>
+			</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <table width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#CCCCCC">
+                        <tr>
+                          <td><table width="100%" border="0" cellspacing="8" cellpadding="9">
+                            <tr valign="top">
+                              <td width="47%"><table width="44%" border="1" cellpadding="1" cellspacing="0" bordercolor="#A2CA0E" style="width: 393px; height: 393px">
+                                <tr>
+                                  <td style="display: table; width: 393px; height: 393px"><div style="display: table-cell; vertical-align: middle; text-align: center;"><img id="main_image" src="<?php echo count($productDetail['images']) > 0 ? 'cms/image/' . $productDetail['images'][0] : 'images/pic1_b.jpg'; ?>" style="max-width: 393px; max-height: 393px" /></div></td>
+                                </tr>
+                              </table></td>
+                              <td width="53%" rowspan="2" valign="top"><table width="100%" height="67%" border="0" cellpadding="9" cellspacing="8">
+                                <tr>
+                                  <td height="138"><table width="100%" border="0" cellspacing="5" cellpadding="0">
+                                    <tr>
+                                      <td width="32%"><div align="left" class="style2"><span class="style11">Item Number : <br />
+                                      </span></div></td>
+                                      <td width="68%"><div align="left"><strong><span class="style5 style2"><?php echo $productDetail['product_no']; ?></span></strong></div></td>
+                                    </tr>
+<!--
+                                    <tr>
+                                      <td><div align="left" class="style2"><span class="style11">Brand :</span></div></td>
+                                      <td width="68%"><div align="left"><strong><span class="style5 style2"><?php echo $productDetail['brand']; ?></span></strong></div></td>
+                                    </tr>
+                                    <tr>
+                                      <td><div align="left" class="style2"><span class="style11">Name :<br />
+                                      </span></div></td>
+                                      <td width="68%"><div align="left"><strong><span class="style5 style2"><?php echo $productDetail['name']; ?></span></strong></div></td>
+                                    </tr>
+                                    <tr>
+                                      <td><div align="left" class="style2"><span class="style11">Model Number :<br />
+                                      </span></div></td>
+                                      <td width="68%"><div align="left"><strong><span class="style5 style2"><?php echo $productDetail['model_no']; ?></span></strong></div></td>
+                                    </tr>
+-->
+                                    <tr>
+                                      <td style="height: 22px"><div align="left" class="style2"><span class="style11">Description :</span></div></td>
+					<td rowspan="2"><div style="height: 260px; overflow-x: hidden; overflow-y: auto"><?php echo $productDetail['description']; ?></td>
+                                      </tr>
+					<tr>
+					<td style="height: 238px">&nbsp;</td>
+					</tr>
+                                  </table></td>
+                                </tr>
+                                <tr>
+                                  <td height="104" valign="bottom"><div align="right">
+				    <table>
+					<tr>
+					<td style="width: 300px">
+				<?php
+					if(count($productDetail['pdfs']) > 0) {
+				?>
+                                    <a href="cms/image/<?php echo $productDetail['pdfs'][0] ?>" target="_blank"><img src="images/pdf.jpg" width="283" height="104" border="0" /></a>
+				<?php
+					} else
+						echo "&nbsp;";
+				?>
+					</td>
+					<td>
+						<img src="images/line.jpg" width="23" height="104" /><a href="mailto:galleon@hkstar.com"><img src="images/mail.jpg" width="77" height="104" border="0" /></a></p>
+					</td>
+					</tr>
+				    </table>
+                                    </div></td>
+                                </tr>
+                              </table></td>
+                            </tr>
+                            <tr valign="top">
+                              <td><table border="0" cellspacing="3" cellpadding="3">
+                                <tr>
+			<?php
+				if(count($productDetail['images']) > 1)
+				{
+					$i = 0;
+					foreach($productDetail['images'] as $image) {
+						if($i == 5)
+							echo "</tr><tr>";
+			?>
+                                  <td ><table width="7%" border="1" cellpadding="1" cellspacing="0" bordercolor="#A2CA0E">
+                                    <tr>
+                                      <td style="display: table; width: 73px"><div onmouseover="$('#main_image').attr('src', $('#thumbnail_<?php echo $i; ?>').attr('src'));" style="display: table-cell; vertical-align: middle; text-align: center; width: 73px; height: 73px"><img id="thumbnail_<?php echo $i; ?>" src="cms/image/<?php echo $image; ?>" style="max-width: 73px; max-height: 73px; margin: auto;" /></div></td>
+                                    </tr>
+                                  </table></td>
+			<?php
+						$i++;
+					}
+				}
+			?>
+                                </tr>
+                              </table></td>
+                            </tr>
+                          </table></td>
+                        </tr>
+                      </table>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p>
+                      <p align="justify" class="style2">&nbsp;</p></td>
+                  </tr>
+                </table>
+<?php
+	include_once('includes/footer.php');
+?>

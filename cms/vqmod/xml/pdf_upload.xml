@@ -1,0 +1,42 @@
+<modification>
+	<id>PDF File Uploader</id>
+	<version>1.0</version>
+	<vqmver>2.1.5</vqmver>
+	<author>Furqan Nadeem -  Tristar Web Solutions</author>
+	<file name="admin/controller/common/filemanager.php">
+		<operation>
+			<search position="before"><![CDATA[if (isset($this->request->get['image'])) {]]></search>
+			<add><![CDATA[$ext = strrchr($this->request->get['image'], '.');
+                if(strtolower($ext) == '.pdf') {
+                    $this->request->get['image'] = 'pdf_icon.png';
+                }]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA['.jpg',]]></search>
+			<add><![CDATA['.pdf',]]></add>
+		</operation>
+        <operation error="skip"><!-- 1.5.0.x - 1.5.1.2 only -->
+			<search position="replace"><![CDATA[$this->model_tool_image->resize(substr($file, strlen(DIR_IMAGE)), 100, 100)]]></search>
+            <add><![CDATA[(strtolower($ext) == '.pdf') ? $this->model_tool_image->resize('pdf_icon.png', 100, 100) : $this->model_tool_image->resize(substr($file, strlen(DIR_IMAGE)), 100, 100)]]></add>
+		</operation>
+        <operation error="skip"><!-- 1.5.1.3 only -->
+			<search position="replace"><![CDATA[$this->model_tool_image->resize(utf8_substr($file, strlen(DIR_IMAGE)), 100, 100)]]></search>
+			<add><![CDATA[(strtolower($ext) == '.pdf') ? $this->model_tool_image->resize('pdf_icon.png', 100, 100) : $this->model_tool_image->resize(utf8_substr($file, strlen(DIR_IMAGE)), 100, 100)]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[300000]]></search>
+			<add><![CDATA[4000000]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA['image/jpeg',]]></search>
+			<add><![CDATA['application/pdf',
+                'application/x-pdf',]]></add>
+		</operation>
+    </file>
+	<file name="admin/language/english/common/filemanager.php">
+		<operation>
+			<search position="replace"><![CDATA[300kb]]></search>
+			<add><![CDATA[4MB]]></add>
+		</operation>
+    </file>
+</modification>
